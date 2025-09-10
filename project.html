@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Game Login & Sign-Up</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('https://images.unsplash.com/photo-1606788075761-0a8d2e5c52a0') no-repeat center center/cover;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.85);
+      padding: 40px;
+      border-radius: 15px;
+      color: #fff;
+      width: 350px;
+      box-shadow: 0 0 15px #00f2ff;
+      text-align: center;
+    }
+
+    h1 {
+      color: #00f2ff;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 8px;
+      background: #1a1a1a;
+      color: #fff;
+      font-size: 1rem;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #00f2ff;
+      border: none;
+      border-radius: 8px;
+      color: #000;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #00d9e0;
+    }
+
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      margin: 10px 0;
+    }
+
+    .checkbox-container label {
+      margin-left: 8px;
+      font-size: 0.9rem;
+    }
+
+    .toggle-link {
+      margin-top: 10px;
+      color: #00f2ff;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: inline-block;
+    }
+
+    #message {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎮 Game Portal</h1>
+
+    <!-- Login Form -->
+    <form id="loginForm">
+      <input type="text" id="loginUsername" placeholder="Username" required>
+      <input type="password" id="loginPassword" placeholder="Password" required>
+
+      <div class="checkbox-container">
+        <input type="checkbox" id="loginShowPassword">
+        <label for="loginShowPassword">Show Password</label>
+      </div>
+
+      <button type="submit">Login</button>
+      <span class="toggle-link" onclick="toggleForms()">Don't have an account? Sign up</span>
+    </form>
+
+    <!-- Signup Form -->
+    <form id="signupForm" class="hidden">
+      <input type="text" id="signupUsername" placeholder="Choose a Username" required>
+      <input type="password" id="signupPassword" placeholder="Choose a Password" required>
+
+      <div class="checkbox-container">
+        <input type="checkbox" id="signupShowPassword">
+        <label for="signupShowPassword">Show Password</label>
+      </div>
+
+      <button type="submit">Sign Up</button>
+      <span class="toggle-link" onclick="toggleForms()">Already have an account? Login</span>
+    </form>
+
+    <p id="message"></p>
+  </div>
+
+  <script>
+    // Dummy user store (key-value)
+    const users = {
+      "player1": "pass123" // default demo user
+    };
+
+    const loginForm = document.getElementById("loginForm");
+    const signupForm = document.getElementById("signupForm");
+    const message = document.getElementById("message");
+
+    // Show/hide password
+    document.getElementById("loginShowPassword").addEventListener("change", function () {
+      document.getElementById("loginPassword").type = this.checked ? "text" : "password";
+    });
+
+    document.getElementById("signupShowPassword").addEventListener("change", function () {
+      document.getElementById("signupPassword").type = this.checked ? "text" : "password";
+    });
+
+    // Toggle between login and signup forms
+    function toggleForms() {
+      loginForm.classList.toggle("hidden");
+      signupForm.classList.toggle("hidden");
+      message.textContent = "";
+    }
+
+    // Handle Login
+    loginForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const username = document.getElementById("loginUsername").value.trim();
+      const password = document.getElementById("loginPassword").value;
+
+      if (users[username] && users[username] === password) {
+        message.style.color = "lightgreen";
+        message.textContent = "✅ Login successful! Redirecting...";
+        setTimeout(() => {
+          alert("Logged in! (Game loading...)");
+        }, 1500);
+      } else {
+        message.style.color = "#ff4e4e";
+        message.textContent = "❌ Invalid username or password.";
+      }
+    });
+
+    // Handle Signup
+    signupForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const username = document.getElementById("signupUsername").value.trim();
+      const password = document.getElementById("signupPassword").value;
+
+      if (users[username]) {
+        message.style.color = "#ff4e4e";
+        message.textContent = "⚠️ Username already taken.";
+      } else {
+        users[username] = password;
+        message.style.color = "lightgreen";
+        message.textContent = "✅ Sign-up successful! You can now log in.";
+        toggleForms(); // Switch back to login
+      }
+    });
+  </script>
+</body>
+</html>
+
